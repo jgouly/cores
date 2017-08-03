@@ -76,12 +76,30 @@ usb_packet_t * usb_malloc(void)
 extern uint8_t usb_rx_memory_needed;
 extern void usb_rx_memory(usb_packet_t *packet);
 
+// http://www.hackersdelight.org/divcMore.pdf
+unsigned divu9(unsigned n) {
+ unsigned q, r;
+ q = n - (n >> 3);
+ q = q + (q >> 6);
+ q = q + (q>>12) + (q>>24);
+ q = q >> 3;
+ r = n - q*9;
+ return q + ((r + 7) >> 4);
+}
+
+unsigned int div_by_72(int n)
+{
+  return divu9(n >> 3);
+}
+
 void usb_free(usb_packet_t *p)
 {
 	unsigned int n, mask;
 
 	//serial_print("free:");
-	n = ((uint8_t *)p - usb_buffer_memory) / sizeof(usb_packet_t);
+	char X[sizeof(usb_packet_t) == 72 ? 1 : -1];
+	n =  div_by_72(((uint8_t *)p - usb_buffer_memory));
+
 	if (n >= NUM_USB_BUFFERS) return;
 	//serial_phex(n);
 	//serial_print("\n");

@@ -36,7 +36,12 @@
 // provided by usb_dev.c are meant to be called only by
 // code which provides higher-level interfaces to the user.
 
+#if 0
 #include <stdint.h>
+#endif
+typedef unsigned int uint32_t;
+typedef unsigned short uint16_t;
+typedef unsigned char uint8_t;
 #include <stddef.h>
 
 #define ENDPOINT_UNUSED			0x00
@@ -146,9 +151,10 @@ let me know?  http://forum.pjrc.com/forums/4-Suggestions-amp-Bug-Reports
   #define PRODUCT_NAME		{'K','e','y','b','o','a','r','d'}
   #define PRODUCT_NAME_LEN	8
   #define EP0_SIZE		64
-  #define NUM_ENDPOINTS         4
+  #define NUM_ENDPOINTS         1
   #define NUM_USB_BUFFERS	14
-  #define NUM_INTERFACE		3
+  #define NUM_INTERFACE		1
+#if 0
   #define SEREMU_INTERFACE      1	// Serial emulation
   #define SEREMU_TX_ENDPOINT    1
   #define SEREMU_TX_SIZE        64
@@ -156,20 +162,25 @@ let me know?  http://forum.pjrc.com/forums/4-Suggestions-amp-Bug-Reports
   #define SEREMU_RX_ENDPOINT    2
   #define SEREMU_RX_SIZE        32
   #define SEREMU_RX_INTERVAL    2
+#endif
   #define KEYBOARD_INTERFACE    0	// Keyboard
-  #define KEYBOARD_ENDPOINT     3
+  #define KEYBOARD_ENDPOINT     1
   #define KEYBOARD_SIZE         8
   #define KEYBOARD_INTERVAL     1
+#if 0
   #define KEYMEDIA_INTERFACE    2	// Keyboard Media Keys
   #define KEYMEDIA_ENDPOINT     4
   #define KEYMEDIA_SIZE         8
   #define KEYMEDIA_INTERVAL     4
+#endif
   #define ENDPOINT1_CONFIG	ENDPOINT_TRANSIMIT_ONLY
+#if 0
   #define ENDPOINT2_CONFIG	ENDPOINT_RECEIVE_ONLY
   #define ENDPOINT3_CONFIG	ENDPOINT_TRANSIMIT_ONLY
   #define ENDPOINT4_CONFIG	ENDPOINT_TRANSIMIT_ONLY
   #define ENDPOINT5_CONFIG	ENDPOINT_TRANSIMIT_ONLY
   #define ENDPOINT6_CONFIG	ENDPOINT_TRANSIMIT_ONLY
+#endif
 
 #elif defined(USB_HID)
   #define VENDOR_ID		0x16C0

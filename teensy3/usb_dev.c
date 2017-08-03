@@ -43,7 +43,9 @@
 #include "kinetis.h"
 //#include "HardwareSerial.h"
 #include "usb_mem.h"
+#if 0
 #include <string.h> // for memset
+#endif
 
 // buffer descriptor table
 
@@ -593,7 +595,9 @@ static void usb_control(uint32_t stat)
 #endif
 #ifdef KEYBOARD_INTERFACE
 		if (setup.word1 == 0x02000921 && setup.word2 == ((1<<16)|KEYBOARD_INTERFACE)) {
+#if 0
 			keyboard_leds = buf[0];
+#endif
 			endpoint0_transmit(NULL, 0);
 		}
 #endif
@@ -1108,6 +1112,10 @@ void usb_init(void)
 	// assume 48 MHz clock already running
 	// SIM - enable clock
 	SIM_SCGC4 |= SIM_SCGC4_USBOTG;
+
+	USB0_CLK_RECOVER_IRC_EN |= USB_CLK_RECOVER_IRC_EN_IRC_EN;
+	USB0_CLK_RECOVER_CTRL |= USB_CLK_RECOVER_CTRL_CLOCK_RECOVER_EN;
+
 #ifdef HAS_KINETIS_MPU
 	MPU_RGDAAC0 |= 0x03000000;
 #endif
@@ -1118,8 +1126,10 @@ void usb_init(void)
 		USB_CLK_RECOVER_CTRL_RESTART_IFRTRIM_EN;
 #endif
 	// reset USB module
-	//USB0_USBTRC0 = USB_USBTRC_USBRESET;
+	USB0_USBTRC0 = USB_USBTRC_USBRESET;
 	//while ((USB0_USBTRC0 & USB_USBTRC_USBRESET) != 0) ; // wait for reset to end
+
+	SIM_SOPT2 |= SIM_SOPT2_USBSRC;
 
 	// set desc table base addr
 	USB0_BDTPAGE1 = ((uint32_t)table) >> 8;
@@ -1131,7 +1141,7 @@ void usb_init(void)
 	USB0_ERRSTAT = 0xFF;
 	USB0_OTGISTAT = 0xFF;
 
-	//USB0_USBTRC0 |= 0x40; // undocumented bit
+	USB0_USBTRC0 |= 0x40; // undocumented bit
 
 	// enable USB
 	USB0_CTL = USB_CTL_USBENSOFEN;
@@ -1146,6 +1156,8 @@ void usb_init(void)
 
 	// enable d+ pullup
 	USB0_CONTROL = USB_CONTROL_DPPULLUPNONOTG;
+
+	__enable_irq();
 }
 
 

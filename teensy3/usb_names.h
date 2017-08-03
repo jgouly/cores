@@ -34,7 +34,9 @@
 // These definitions are intended to allow users to override the default
 // USB manufacturer, product and serial number strings.
 
+#if 0
 #include <stdint.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {

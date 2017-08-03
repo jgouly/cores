@@ -31,7 +31,9 @@
 #ifndef _kinetis_h_
 #define _kinetis_h_
 
+#if 0
 #include <stdint.h>
+#endif
 
 // Teensy 3.0
 #if defined(__MK20DX128__)
